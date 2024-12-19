@@ -11,19 +11,19 @@ pub struct Ticket {
 
 impl Ticket {
     pub fn new(title: String, description: String, status: String) -> Ticket {
-        if title.is_empty() {
+        if title_empty(&title) {
             panic!("Title cannot be empty");
         }
-        if title.len() > 50 {
+        if title_long(&title) {
             panic!("Title cannot be longer than 50 bytes");
         }
-        if description.is_empty() {
+        if description_empty(&description) {
             panic!("Description cannot be empty");
         }
-        if description.len() > 500 {
+        if description_long(&description) {
             panic!("Description cannot be longer than 500 bytes");
         }
-        if status != "To-Do" && status != "In Progress" && status != "Done" {
+        if status_valid(&status) {
             panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed");
         }
 
@@ -45,6 +45,53 @@ impl Ticket {
     pub fn status(&self) -> &String {
         &self.status
     }
+
+    pub fn set_title(&mut self, new_title: String) {
+        if title_empty(&new_title) {
+            panic!("Title cannot be empty");
+        }
+        if title_long(&new_title) {
+            panic!("Title cannot be longer than 50 bytes");
+        }
+        self.title = new_title;
+    }
+
+    pub fn set_description(&mut self, new_description: String) {
+        if description_empty(&new_description) {
+            panic!("Description cannot be empty");
+        }
+        if description_long(&new_description) {
+            panic!("Description cannot be longer than 500 bytes");
+        }
+        self.description = new_description;
+    }
+
+    pub fn set_status(&mut self, new_status: String) {
+        if status_valid(&new_status) {
+            panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed");
+        }
+        self.status = new_status
+    }
+}
+
+fn title_empty(title: &str) -> bool {
+    title.is_empty()
+}
+
+fn title_long(title: &str) -> bool {
+    title.len() > 50
+}
+
+fn description_empty(description: &str) -> bool {
+    description.is_empty()
+}
+
+fn description_long(description: &str) -> bool {
+    description.len() > 500
+}
+
+fn status_valid(status: &str) -> bool {
+    status != "To-Do" && status != "In Progress" && status != "Done"
 }
 
 #[cfg(test)]
